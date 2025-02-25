@@ -1,11 +1,10 @@
 import ChatBoat from "./ChatBoat";
-
+import GeminiAPIComponent from "./GeminiAPIComponent";
 function App() {
   return (
-    <div>
-      <h1 className="bg-red-500">Hello, world!</h1>
-      <p>Welcome to the world of React Server Components!</p>
-      <ChatBoat />
+    <div className="p-4">
+      {/* <ChatBoat /> */}
+      <GeminiAPIComponent />
     </div>
   );
 }

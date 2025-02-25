@@ -1,8 +1,8 @@
-import GeminiAPIComponent from "./GeminiAPIComponent";
+import ChatUI from "./ChatUI";``
 function App() {
   return (
     <div className="p-4">
-      <GeminiAPIComponent />
+      <ChatUI />
     </div>
   );
 }

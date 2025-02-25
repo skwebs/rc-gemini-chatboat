@@ -1,4 +1,3 @@
-import ChatBoat from "./ChatBoat";
 import GeminiAPIComponent from "./GeminiAPIComponent";
 function App() {
   return (

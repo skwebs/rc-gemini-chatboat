@@ -18,17 +18,11 @@ const GeminiAPIComponent = () => {
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: inputText }] }]
-                })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: inputText }] }] })
             });
 
-            if (!res.ok) {
-                throw new Error("Failed to fetch the response from Gemini API.");
-            }
+            if (!res.ok) throw new Error("Failed to fetch response from Gemini API.");
 
             const data = await res.json();
             const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response available.";
@@ -40,9 +34,19 @@ const GeminiAPIComponent = () => {
         }
     };
 
+    // Function to format the response
+    const formatResponse = (text) => {
+        return text
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")  // Bold text
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")              // Italic text
+            .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>") // Code blocks
+            .replace(/`(.*?)`/g, "<code>$1</code>")           // Inline code
+            .replace(/\n/g, "<br/>");                         // New lines
+    };
+
     return (
-        <div className="p-4 max-w-md mx-auto">
-            <h1 className="text-xl font-bold mb-4">Gemini API Integration</h1>
+        <div className="p-4 max-w-2xl mx-auto">
+            <h1 className="text-2xl font-bold mb-4">Gemini API Integration</h1>
             <form onSubmit={handleSubmit} className="mb-4">
                 <input
                     type="text"
@@ -61,8 +65,11 @@ const GeminiAPIComponent = () => {
 
             {response && (
                 <div className="mt-4 p-4 border rounded bg-gray-100">
-                    <h2 className="text-lg font-semibold">Response:</h2>
-                    <p>{response}</p>
+                    <h2 className="text-lg font-semibold mb-2">Response:</h2>
+                    <div
+                        className="prose"
+                        dangerouslySetInnerHTML={{ __html: formatResponse(response) }}
+                    />
                 </div>
             )}
         </div>

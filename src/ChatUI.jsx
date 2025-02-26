@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { API_KEY } from "./config";
-
+import "./chatui.css";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 const ChatUI = () => {
@@ -70,7 +70,7 @@ const ChatUI = () => {
   };
 
   return (
-    <div className=" bg-gray-100 flex min-h-screen justify-center align-center items-center">
+    <div className=" bg flex min-h-screen justify-center align-center items-center">
       <div className="relative h-[calc(100vh-50px)] overflow-hidden flex p-6 flex-col w-full max-w-2xl bg-white shadow-lg rounded-2xl">
         <div
           className={`absolute top-0 font-semibold left-0 px-6 flex items-center gap-4  bg-white py-3 w-full ${

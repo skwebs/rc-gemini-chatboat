@@ -13,6 +13,10 @@ const ChatUI = () => {
 
   const scrollRef = useRef(null);
 
+  useEffect(() => {
+    document.title = "ChatBot | By SGN Students";
+  }, []);
+
   const handleScroll = () => {
     if (scrollRef.current) {
       const scrollTop = scrollRef.current.scrollTop;

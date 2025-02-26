@@ -70,7 +70,7 @@ const ChatUI = () => {
   };
 
   return (
-    <div className=" bg flex min-h-screen justify-center align-center items-center">
+    <div className="px-2 bg flex min-h-screen justify-center align-center items-center">
       <div className="relative h-[calc(100vh-50px)] overflow-hidden flex p-6 flex-col w-full max-w-2xl bg-white shadow-lg rounded-2xl">
         <div
           className={`absolute top-0 font-semibold left-0 px-6 flex items-center gap-4  bg-white py-3 w-full ${
@@ -78,9 +78,9 @@ const ChatUI = () => {
           }`}
         >
           <h2 className="text-2xl font-bold text-gray-400">ChatBot</h2>
-          <span className="text-gray-400">
+          <span className="text-gray-400 text-xs">
             Created by{" - "}
-            <span className="font-normal text-gray-400">
+            <span className=" leading-0 font-normal text-gray-400">
               SGN Student with the help of Computer Teacher
             </span>
           </span>
@@ -101,7 +101,7 @@ const ChatUI = () => {
               } mb-2`}
             >
               <div
-                className={`p-3 rounded-lg max-w-[80%] ${
+                className={`px-3 py-2 rounded-lg max-w-[80%] ${
                   msg.role === "user"
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-black"

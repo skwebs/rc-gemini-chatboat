@@ -9,6 +9,16 @@ const ChatUI = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [hasShadow, setHasShadow] = useState(false);
+
+  const scrollRef = useRef(null);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const scrollTop = scrollRef.current.scrollTop;
+      setHasShadow(scrollTop > 50);
+    }
+  };
 
   const questionRef = useRef(null); // Reference for scrolling to user question
 
@@ -56,12 +66,28 @@ const ChatUI = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
-      <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-4">
-        <h1 className="text-2xl font-bold mb-4">SGN ChatBot</h1>
+    <div className=" bg-gray-100 flex min-h-screen justify-center align-center items-center">
+      <div className="relative h-[calc(100vh-50px)] overflow-hidden flex p-6 flex-col w-full max-w-2xl bg-white shadow-lg rounded-2xl">
+        <div
+          className={`absolute top-0 font-semibold left-0 px-6 flex items-center gap-4  bg-white py-3 w-full ${
+            hasShadow && "shadow"
+          }`}
+        >
+          <h2 className="text-2xl font-bold text-gray-400">ChatBot</h2>
+          <span className="text-gray-400">
+            Created by{" - "}
+            <span className="font-normal text-gray-400">
+              SGN Student with the help of Computer Teacher
+            </span>
+          </span>
+        </div>
 
         {/* Chat messages */}
-        <div className="chat-box overflow-y-auto h-96 p-2 border rounded mb-4 bg-gray-50">
+        <div
+          className="no-scrollbar overflow-y-auto flex-1 pt-10 pb-20  rounded "
+          ref={scrollRef}
+          onScroll={handleScroll}
+        >
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -88,21 +114,32 @@ const ChatUI = () => {
         </div>
 
         {/* Input form */}
-        <form onSubmit={handleSubmit} className="flex">
-          <input
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            placeholder="Ask something..."
-            className="flex-grow p-2 border rounded-l"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 rounded-r"
+        <div className="absolute bottom-0 left-0 w-full p-4">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white flex shadow-lg border border-gray-200 rounded-2xl overflow-hidden pe-3"
           >
-            Send
-          </button>
-        </form>
+            <input
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              placeholder="Ask something..."
+              className="flex-grow focus:outline-none  p-6"
+            />
+            <button type="submit" className="cursor-pointer ">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-arrow-up-circle-fill size-10"
+                viewBox="0 0 16 16"
+              >
+                <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
+              </svg>
+            </button>
+          </form>
+        </div>
 
         {error && <p className="text-red-500 mt-2">Error: {error}</p>}
       </div>

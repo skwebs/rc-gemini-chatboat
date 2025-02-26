@@ -1,7 +1,8 @@
-import ChatUI from "./ChatUI";``
+import ChatUI from "./ChatUI";
+``;
 function App() {
   return (
-    <div className="p-4">
+    <div>
       <ChatUI />
     </div>
   );

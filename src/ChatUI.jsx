@@ -1,18 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
-// import { API_KEY, API_LINK } from "./config";
+import { useState, useEffect, useRef } from "react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { API_KEY } from "./config";
+
+const genAI = new GoogleGenerativeAI(API_KEY);
 
 const ChatUI = () => {
   const [inputText, setInputText] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const lastMessageRef = useRef(null); // Reference for the latest message
 
+  const questionRef = useRef(null); // Reference for scrolling to user question
 
-  // Scroll the last message into view with "start" alignment (top of viewport)
   useEffect(() => {
-    if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (questionRef.current) {
+      questionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, [messages]);
 
@@ -21,58 +26,56 @@ const ChatUI = () => {
     if (!inputText.trim()) return;
 
     const userMessage = { role: "user", text: inputText };
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputText("");
     setLoading(true);
     setError("");
 
     try {
-      const res = await fetch(`${API_LINK}${API_KEY}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contents: [{ parts: [{ text: inputText }] }] })
-      });
-
-      if (!res.ok) throw new Error("Failed to fetch the response from Gemini API.");
-
-      const data = await res.json();
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response available.";
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const result = await model.generateContent(inputText);
+      const reply = result.response.text() || "No response available.";
 
       const aiMessage = { role: "ai", text: reply };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (err) {
-      setError(err.message);
+      console.log(err);
+      setError("Failed to fetch response.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Format the response for display
   const formatResponse = (text) => {
     return text
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")  // Bold
-      .replace(/\*(.*?)\*/g, "<em>$1</em>")              // Italic
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Bold
+      .replace(/\*(.*?)\*/g, "<em>$1</em>") // Italic
       .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>") // Code block
-      .replace(/`(.*?)`/g, "<code>$1</code>")           // Inline code
-      .replace(/\n/g, "<br/>");                         // Line breaks
+      .replace(/`(.*?)`/g, "<code>$1</code>") // Inline code
+      .replace(/\n/g, "<br/>"); // Line breaks
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
       <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-4">
-        <h1 className="text-2xl font-bold mb-4">SGN ChatBoat</h1>
+        <h1 className="text-2xl font-bold mb-4">SGN ChatBot</h1>
 
         {/* Chat messages */}
         <div className="chat-box overflow-y-auto h-96 p-2 border rounded mb-4 bg-gray-50">
           {messages.map((msg, index) => (
             <div
               key={index}
-              ref={index === messages.length - 1 ? lastMessageRef : null} // Attach ref to the last message
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} mb-2`}
+              ref={msg.role === "user" ? questionRef : null} // Scroll user question into view
+              className={`flex ${
+                msg.role === "user" ? "justify-end" : "justify-start"
+              } mb-2`}
             >
               <div
-                className={`p-3 rounded-lg max-w-[80%] ${msg.role === "user" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"
-                  }`}
+                className={`p-3 rounded-lg max-w-[80%] ${
+                  msg.role === "user"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-black"
+                }`}
                 dangerouslySetInnerHTML={{ __html: formatResponse(msg.text) }}
               />
             </div>
@@ -93,7 +96,10 @@ const ChatUI = () => {
             placeholder="Ask something..."
             className="flex-grow p-2 border rounded-l"
           />
-          <button type="submit" className="bg-blue-500 text-white px-4 rounded-r">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 rounded-r"
+          >
             Send
           </button>
         </form>

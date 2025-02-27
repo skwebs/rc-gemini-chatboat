@@ -1,11 +1,11 @@
-html, body {
+/* html, body {
   overflow: hidden;
-  height: 100dvh;
+  height: 100svh;
   overscroll-behavior: contain;
-}
+} */
 
 .bg-overlay{
   background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(60, 60, 60, 0.9)), url("/school.jpg") center/cover no-repeat fixed;
-  height: var(--app-height);
+  /* height: var(--app-height); */
 }
 

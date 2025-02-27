@@ -24,19 +24,19 @@ const ChatUI = () => {
     }
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      document.documentElement.style.setProperty(
-        "--app-height",
-        `${window.innerHeight}px`
-      );
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     document.documentElement.style.setProperty(
+  //       "--app-height",
+  //       `${window.innerHeight}px`
+  //     );
+  //   };
 
-    window.addEventListener("resize", handleResize);
-    handleResize(); // Set on initial load
+  //   window.addEventListener("resize", handleResize);
+  //   handleResize(); // Set on initial load
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   const questionRef = useRef(null); // Reference for scrolling to user question
 
@@ -84,10 +84,10 @@ const ChatUI = () => {
   };
 
   return (
-    <div className="px-4 md:px-0 bg-overlay flex  justify-center align-center items-center">
-      <div className="relative h-[calc(100vh-100px)] md:h-[calc(100vh-50px)] overflow-hidden flex  flex-col w-full max-w-2xl bg-white shadow-lg rounded-2xl">
+    <div className=" h-[100svh] px-4 md:px-0  bg-overlay flex  justify-center align-center items-center">
+      <div className="relative h-[calc(100svh-50px)] overflow-hidden flex  flex-col w-full max-w-2xl bg-white shadow-lg rounded-2xl">
         <div
-          className={`absolute top-0 font-semibold left-0 px-6 flex items-center gap-4  bg-white py-3 w-full ${hasShadow && "shadow"
+          className={`absolute top-0 font-semibold left-0 px-6 flex items-center gap-4  bg-white py-3 w-full ${hasShadow && "shadow shadow-gray-100"
             }`}
         >
           <h2 className="text-2xl font-bold text-gray-400">ChatBot</h2>

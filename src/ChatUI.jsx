@@ -24,6 +24,20 @@ const ChatUI = () => {
     }
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      document.documentElement.style.setProperty(
+        "--app-height",
+        `${window.innerHeight}px`
+      );
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Set on initial load
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const questionRef = useRef(null); // Reference for scrolling to user question
 
   useEffect(() => {
@@ -70,12 +84,11 @@ const ChatUI = () => {
   };
 
   return (
-    <div className="px-2 bg flex min-h-screen justify-center align-center items-center">
-      <div className="relative h-[calc(100vh-50px)] overflow-hidden flex p-6 flex-col w-full max-w-2xl bg-white shadow-lg rounded-2xl">
+    <div className="px-4 md:px-0 bg-overlay flex  justify-center align-center items-center">
+      <div className="relative h-[calc(100vh-100px)] md:h-[calc(100vh-50px)] overflow-hidden flex  flex-col w-full max-w-2xl bg-white shadow-lg rounded-2xl">
         <div
-          className={`absolute top-0 font-semibold left-0 px-6 flex items-center gap-4  bg-white py-3 w-full ${
-            hasShadow && "shadow"
-          }`}
+          className={`absolute top-0 font-semibold left-0 px-6 flex items-center gap-4  bg-white py-3 w-full ${hasShadow && "shadow"
+            }`}
         >
           <h2 className="text-2xl font-bold text-gray-400">ChatBot</h2>
           <span className="text-gray-400 text-xs">
@@ -88,7 +101,7 @@ const ChatUI = () => {
 
         {/* Chat messages */}
         <div
-          className="no-scrollbar overflow-y-auto flex-1 pt-10 pb-20  rounded "
+          className="no-scrollbar overflow-y-auto flex-1 px-6 pt-14 pb-24  rounded "
           ref={scrollRef}
           onScroll={handleScroll}
         >
@@ -96,16 +109,14 @@ const ChatUI = () => {
             <div
               key={index}
               ref={msg.role === "user" ? questionRef : null} // Scroll user question into view
-              className={`flex ${
-                msg.role === "user" ? "justify-end" : "justify-start"
-              } mb-2`}
+              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
+                } mb-2`}
             >
               <div
-                className={`px-3 py-2 rounded-lg max-w-[80%] ${
-                  msg.role === "user"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-black"
-                }`}
+                className={`px-3 py-2 rounded-lg max-w-[80%] ${msg.role === "user"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-black"
+                  }`}
                 dangerouslySetInnerHTML={{ __html: formatResponse(msg.text) }}
               />
             </div>
@@ -118,7 +129,7 @@ const ChatUI = () => {
         </div>
 
         {/* Input form */}
-        <div className="absolute bottom-0 left-0 w-full p-4">
+        <div className="absolute bottom-0 left-0 w-full px-3 pb-3 bg-white">
           <form
             onSubmit={handleSubmit}
             className="bg-white flex shadow-lg border border-gray-200 rounded-2xl overflow-hidden pe-3"

@@ -24,22 +24,8 @@ const ChatUI = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     document.documentElement.style.setProperty(
-  //       "--app-height",
-  //       `${window.innerHeight}px`
-  //     );
-  //   };
-
-  //   window.addEventListener("resize", handleResize);
-  //   handleResize(); // Set on initial load
-
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
 
   const questionRef = useRef(null); // Reference for scrolling to user question
-
   useEffect(() => {
     if (questionRef.current) {
       questionRef.current.scrollIntoView({
